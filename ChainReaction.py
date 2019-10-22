@@ -49,20 +49,20 @@ def blast(arr):
     for i in range(len(arr)):
         for j in range(len(arr[0])):
             if((i == 0 or i == len(arr)-1) and (j == 0 or j == len(arr[0])-1) and arr[i][j]%ch_color >= 2):        # angolo
-                print("Blast: " + str(i) + " - " + str(j) + " - " + str(arr[i][j]))
+                #print("Blast: " + str(i) + " - " + str(j) + " - " + str(arr[i][j]))
                 return True
             elif(((i == 0 or i == len(arr)-1) or (j == 0 or j == len(arr[0])-1)) and arr[i][j]%ch_color >= 3):    # lato
-                print("Blast: " + str(i) + " - " + str(j) + " - " + str(arr[i][j]))
+                #print("Blast: " + str(i) + " - " + str(j) + " - " + str(arr[i][j]))
                 return True
             elif arr[i][j]%ch_color >= 4:
-                print("Blast: " + str(i) + " - " + str(j) + " - " + str(arr[i][j]))
+                #print("Blast: " + str(i) + " - " + str(j) + " - " + str(arr[i][j]))
                 return True
     return False
 
 def propagation(arr, pl, win, info):
     ch_color = 10
     printMatCIRCLE(arr, win, info)
-    while(blast(arr)):
+    while(blast(arr) and checkmanyPl(arr)):
         back = copy.deepcopy(arr)
         for i in range(len(arr)):
             for j in range(len(arr[0])):
@@ -230,6 +230,7 @@ def printMatCIRCLE(arr, win, info):
 
 turn = 0
 players = 2
+winner = 0
 
 size_disp = 20
 corner = 20
@@ -248,9 +249,10 @@ printMatCIRCLE(map, win, info)
 
 #x = input("HERE2")
 
-while (checkMap(map) or checkmanyPl(map)):
+while ((checkMap(map) and turn < players) or checkmanyPl(map)):
     turn = turn + 1
     pl = (turn-1)%players
+    winner = pl + 1
     #x = input("HERE3")
     info = [turn, pl + 1]
     
@@ -264,8 +266,11 @@ while (checkMap(map) or checkmanyPl(map)):
         else: 
             map[coord[0]][coord[1]] += 1
         map = propagation(map, pl, win, info)
-        
-        
+
+win.close()
+print("\n\n                FINISHED!   Player " + str(winner) + " won!")
+x = input("\n\nPress ENTER to exit...")
+
 '''
 printMatCIRCLE(map, win)
 inputMat(map, win)
