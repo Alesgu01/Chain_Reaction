@@ -88,14 +88,15 @@ def propagation(arr, pl, win, info):
                     if(not(j-1 < 0)):
                         arr[i][j-1] = back[i][j-1]%ch_color + ch_color*pl + 1
                     
-                elif back[i][j]%ch_color >= 4:                                                                        # interno
+                elif(back[i][j]%ch_color >= 4):                                                                        # interno
                     arr[i][j] = pl * ch_color + (back[i][j]-4)%ch_color
                     
                     arr[i+1][j] = back[i+1][j]%ch_color + ch_color*pl + 1
                     arr[i-1][j] = back[i-1][j]%ch_color + ch_color*pl + 1
                     arr[i][j+1] = back[i][j+1]%ch_color + ch_color*pl + 1
                     arr[i][j-1] = back[i][j-1]%ch_color + ch_color*pl + 1
-        
+                if(arr[i][j]%ch_color == 0):
+                    arr[i][j]=0    
         printMatCIRCLE(arr, win, info)    
         #win.getMouse()
     return arr
@@ -226,6 +227,49 @@ def printMatCIRCLE(arr, win, info):
         pass
     update(5)
 
+def printMatCIRCLED(arr, win, info):
+    clear(win)
+    corner = 20
+    size_disp = (win.width - 2*corner)/(2*len(arr))
+    radius = 8
+    ch_color = 10
+    #win = GraphWin("ChainReaction", len(arr)*size_disp*2, len(arr[0])*size_disp*2, autoflush=False)
+    try:
+        
+        # creates frame
+        l = Line(Point(1 + corner, 1 + corner), Point(1 + corner, len(arr[0])*2*size_disp-1 + corner))
+        l.draw(win)
+        l = Line(Point(1 + corner, 1 + corner), Point(len(arr)*2*size_disp-1 + corner, 1 + corner))
+        l.draw(win)
+        l = Line(Point(len(arr)*2*size_disp-1 + corner, len(arr[0])*2*size_disp-1 + corner), Point(1 + corner, len(arr[0])*2*size_disp-1 + corner))
+        l.draw(win)
+        l = Line(Point(len(arr)*2*size_disp-1 + corner, len(arr[0])*2*size_disp-1 + corner), Point(len(arr)*2*size_disp-1 + corner, 1 + corner))
+        l.draw(win)
+        
+        # creates grid
+        for i in range(len(arr)-1):
+            l = Line(Point((i+1)*size_disp*2 + corner, 1 + corner), Point((i+1)*size_disp*2 + corner, len(arr[0])*2*size_disp-1 + corner))
+            l.draw(win)
+        for j in range(len(arr[0])-1):
+            l = Line(Point(1 + corner, (j+1)*size_disp*2 + corner), Point(len(arr)*2*size_disp-1 + corner, (j+1)*size_disp*2 + corner))
+            l.draw(win)
+        
+        # puts circles
+        for i in range(len(arr)):
+            for j in range(len(arr[0])):
+                msg = Text(Point((2*i+1)*size_disp + math.ceil(radius/2), (2*j+1)*size_disp), str(arr[i][j]))
+                msg.draw(win)
+					
+        # puts info under graph
+        center = Point(math.ceil(win.width/2), win.height - corner - 20)
+        txt = Text(center, "Turn: " + str(info[0]) + "     Player: " + str(info[1]))
+        txt.draw(win)
+        
+    except:
+        print("Error Graphic")
+        pass
+    update(5)
+	
 ## DETERMINE VARIABLES
 
 turn = 0
@@ -236,7 +280,7 @@ size_disp = 20
 corner = 20
 info_height = 100
 
-map = genMatrix(16,12)
+map = genMatrix(2,2)
 ch_color = 10
 
 ## MAIN
